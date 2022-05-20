@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\LaboratoryTestTypeController;
 use App\Http\Controllers\MedicalRecordController;
 use Illuminate\Http\Request;
@@ -16,14 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::apiResource(
-    'laboratory_test_types',
-    LaboratoryTestTypeController::class
-)->only(['index']);
-Route::apiResource(
-    'medical_record',
-    MedicalRecordController::class
-)->only(['show', 'store', 'update']);
+Route::middleware('auth:sanctum')->group(
+    function () {
+        Route::apiResource(
+            'laboratory_test_types',
+            LaboratoryTestTypeController::class
+        )->only(['index']);
+        Route::apiResource(
+            'medical_record',
+            MedicalRecordController::class
+        )->only(['show', 'store', 'update']);
+        Route::post('/logout', [AuthenticationController::class, 'logout']);
+    }
+);
+Route::post('/login', [AuthenticationController::class, 'login']);
