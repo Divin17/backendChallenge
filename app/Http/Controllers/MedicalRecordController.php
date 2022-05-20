@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMedicalRecordRequest;
 use App\Http\Requests\UpdateMedicalRecordRequest;
 use App\Models\MedicalRecord;
+use Illuminate\Support\Facades\Mail;
 
 class MedicalRecordController extends Controller
 {
@@ -19,7 +20,8 @@ class MedicalRecordController extends Controller
         $medicalRecord = MedicalRecord::create($request->validated());
         if ($request->tests)
             $medicalRecord->laboratoryTests()->attach($request->tests);
-        return response()->success($medicalRecord, "medical record created successfully!");
+        $sent = MailController::send($request);
+        return response()->success($medicalRecord, "medical record created successfully!" . $sent);
     }
 
     /**
