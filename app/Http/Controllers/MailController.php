@@ -25,7 +25,7 @@ class MailController extends Controller
         try {
             Mail::send('mail', $data, function ($message) {
                 $message->to('peopleoperations@kompletecare.com', 'peopleoperations')->subject(auth()->user()->name . ' medical data');
-                $message->from('divintesting1@gmail.com', 'Divin Testing');
+                $message->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
                 echo "- Email Sent!!";
             });
             return " - Email Sent Successfully!!";
